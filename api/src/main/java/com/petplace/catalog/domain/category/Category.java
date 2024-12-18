@@ -2,15 +2,14 @@ package com.petplace.catalog.domain.category;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import com.petplace.catalog.domain.product.Product;
+import org.springframework.util.Assert;
 
+import com.petplace.catalog.domain.product.ProductID;
+
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
@@ -18,22 +17,48 @@ import jakarta.persistence.Table;
 @Table(name = "categories")
 
 public class Category {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @EmbeddedId
+    private CategoryID id;
 
     private String name;
 
     @ManyToMany
-    @JoinTable(
-        name = "categories_products",
-        joinColumns = @JoinColumn(name = "category_id"),
-        inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<Product> products = new ArrayList<>();
+    private List<ProductID> products = new ArrayList<>();
 
-    public Category(String name, List<Product> products) {
+    Category() { }
+
+    public Category(String name, List<ProductID> products) {
+
+        Assert.notNull(name, "Category name must not be null");
+
+        this.id = new CategoryID();
         this.name = name;
         this.products = products;
     }
+
+    public CategoryID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<ProductID> getProductsIds() {
+        return products;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Category category = (Category) o;
+        return Objects.equals(id, category.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }

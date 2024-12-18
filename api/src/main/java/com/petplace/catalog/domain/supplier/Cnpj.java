@@ -1,4 +1,4 @@
-package com.petplace.catalog.domain.user;
+package com.petplace.catalog.domain.supplier;
 
 import java.util.regex.Pattern;
 

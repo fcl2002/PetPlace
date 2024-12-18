@@ -1,4 +1,4 @@
-package com.petplace.catalog.domain.security;
+package com.petplace.catalog.domain.user;
 
 public enum UserRole {
     ADMIN, 

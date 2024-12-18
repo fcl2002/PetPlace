@@ -6,11 +6,19 @@ import java.util.Objects;
 
 import org.springframework.util.Assert;
 
+import com.petplace.catalog.application.ProductInformation;
 import com.petplace.catalog.domain.category.Category;
-import com.petplace.catalog.domain.user.Supplier;
+import com.petplace.catalog.domain.supplier.Supplier;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,33 +30,45 @@ public class Product {
     private ProductID id;
 
     private String name;
-    private Double price;
-    private String description;
-    private int stock;
 
+    @Embedded
+    @AttributeOverride(name = "price", column = @Column(name = "unitPrice"))
+    private Price unitPrice;
+    
+    private String description;
+    private String imageUrl;
+    
+    @Embedded
+    @AttributeOverride(name = "stock", column = @Column(name = "stock"))
+    private Stock stock;
+
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
+    @ManyToMany
+    @JoinTable(
+        name = "product_category",
+        joinColumns = @JoinColumn(name = "product_id"),
+        inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
     private List<Category> categories = new ArrayList<>();
 
     Product() { }
 
-    public Product(String name, Double price, String description, int stock,
-                    Supplier supplier, List<Category> categories) {
+    public Product(ProductInformation info) {
 
-        Assert.notNull(name, "name must not be null");
-        Assert.notNull(price, "price must not be null");
-        Assert.isTrue(price >= 0, "price must be positive");
-        Assert.notNull(description, "description must not be null");
-        Assert.isTrue(stock >= 0, "stock must be positive");
-        Assert.notNull(stock, "stock must not be null");
+        Assert.notNull(info.name(), "Product name cannot be null");
+        Assert.notNull(info.description(), "Product description cannot be null");
         
         this.id = new ProductID();
-        this.name = name;
-        this.price = price;
-        this.description = description;
-        this.stock = stock;
-        this.supplier = supplier;
-        this.categories = categories;
+        this.name = info.name();
+        this.unitPrice = info.unitPrice();
+        this.description = info.description();
+        this.imageUrl = info.imageUrl();
+        this.stock = info.stock();
+        this.supplier = info.supplier();
+        this.categories = info.categories();    
     }
 
     public ProductID getId() {
@@ -59,16 +79,28 @@ public class Product {
         return name;
     }
 
-    public Double getPrice() {
-        return price;
+    public Price getPrice() {
+        return unitPrice;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public int getStock() {
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public Stock getStock() {
         return stock;
+    }
+
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
     }
 
     @Override

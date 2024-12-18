@@ -12,8 +12,8 @@ public record Password(String password) {
         if (!PASSWORD_PATTERN.matcher(password).matches()) {
             throw new IllegalArgumentException(
                 "Invalid password: " + password + "\n" +
-                "Must be at least 8 characters long with at least one uppercase letter, " + 
-                "one lowercase letter, one number, and one special character (@$!%*?&).");
+                "Must be at least 8 characters long with at least 1 uppercase letter, " + 
+                "1 lowercase letter, 1 number, and 1 special character (@$!%*?&).");
         }
     }
 }

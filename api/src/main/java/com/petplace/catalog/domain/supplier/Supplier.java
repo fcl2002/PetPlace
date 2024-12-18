@@ -1,10 +1,13 @@
-package com.petplace.catalog.domain.user;
+package com.petplace.catalog.domain.supplier;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.petplace.catalog.domain.product.Product;
-import com.petplace.catalog.domain.security.UserRole;
+import com.petplace.catalog.domain.user.ContactDetails;
+import com.petplace.catalog.domain.user.Password;
+import com.petplace.catalog.domain.user.User;
+import com.petplace.catalog.domain.user.UserRole;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorValue;

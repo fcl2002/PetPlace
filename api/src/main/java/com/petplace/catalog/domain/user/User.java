@@ -2,8 +2,6 @@ package com.petplace.catalog.domain.user;
 
 import java.util.Objects;
 
-import com.petplace.catalog.domain.security.UserRole;
-
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
